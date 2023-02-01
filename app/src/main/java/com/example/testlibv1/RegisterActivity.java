@@ -28,14 +28,9 @@ public class RegisterActivity extends AppCompatActivity {
     Button register, cancel;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
+    DatabaseReference db;
 
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-
-    String uname = name.getText().toString();
-    String uusername = username.getText().toString();
-    String uemail = email.getText().toString();
-    String upass = password.getText().toString();
-    String ucpass = c_password.getText().toString();
 
     ProgressDialog progressDialog;
 
@@ -55,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+        db = FirebaseDatabase.getInstance().getReference().child("User_Details");
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +70,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void PerformAuth() {
 
+        String uemail = email.getText().toString();
+        String upass = password.getText().toString();
+        String ucpass = c_password.getText().toString();
+
         if (!uemail.matches(emailPattern)) {
             email.setError("Enter correct email.");
         } else if (upass.isEmpty() || upass.length() < 6) {
@@ -91,10 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         progressDialog.dismiss();
-
                         updateUser();
-
-                        SendUserToNextActivity();
                         Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
                     } else {
                         progressDialog.dismiss();
@@ -107,22 +104,23 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void updateUser() {
-        UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder()
-                .setDisplayName(uname)
-                .build();
 
+        String uname = name.getText().toString();
+        String uuname = username.getText().toString();
+        String uemail = email.getText().toString();
+
+        db.child(uname).child("uname").setValue(uname);
+        db.child(uname).child("uuname").setValue(uuname);
+        db.child(uname).child("uemail").setValue(uemail);
+
+        UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder().setDisplayName(uname).build();
         mAuth.getCurrentUser().updateProfile(changeRequest);
         mAuth.signOut();
         openLogin();
     }
 
     private void openLogin() {
-        Intent change = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(change);
-    }
-
-    private void SendUserToNextActivity() {
-        Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

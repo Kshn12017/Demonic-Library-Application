@@ -34,7 +34,6 @@ public class ForgotPassword extends AppCompatActivity {
 
         Femail = findViewById(R.id.Femail);
         Fpassword = findViewById(R.id.Fpassword);
-        skip = findViewById(R.id.skip);
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();

@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText email, password;
     Button login, register;
-    TextView forgotpass, skip;
+    TextView forgotpass;
 
     FirebaseAuth mAuth;
     FirebaseUser mUser;
@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         login = findViewById(R.id.login);
         register = findViewById(R.id.register);
-        skip = findViewById(R.id.skip);
         forgotpass = findViewById(R.id.forgotpass);
 
         progressDialog = new ProgressDialog(this);
@@ -72,24 +71,23 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(change);
             }
         });
-
-        skip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent change = new Intent(LoginActivity.this, HomeActivity.class);
-                startActivity(change);
-            }
-        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(mAuth.getCurrentUser()!=null)
-        {
-            Intent change = new Intent(LoginActivity.this,HomeActivity.class);
+        if (mAuth.getCurrentUser() != null) {
+            Intent change = new Intent(LoginActivity.this, NavigationActivity.class);
             startActivity(change);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent change = new Intent(Intent.ACTION_MAIN);
+        change.addCategory(Intent.CATEGORY_HOME);
+        change.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(change);
     }
 
     private void performLogin() {
@@ -116,9 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         SendUserToNextActivity();
                         Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
+                    } else {
                         progressDialog.dismiss();
                         Toast.makeText(LoginActivity.this, "User does not exist.", Toast.LENGTH_SHORT).show();
                     }
@@ -126,8 +122,9 @@ public class LoginActivity extends AppCompatActivity {
             });
         }
     }
-    private void SendUserToNextActivity () {
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+
+    private void SendUserToNextActivity() {
+        Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

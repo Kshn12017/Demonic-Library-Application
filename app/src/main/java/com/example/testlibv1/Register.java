@@ -5,13 +5,11 @@ public class Register {
     String uname;
     String uusername;
     String uemail;
-    String upassword;
 
-    public Register(String uname, String uusername, String uemail, String upassword) {
+    public Register(String uname, String uusername, String uemail) {
         this.uname = uname;
         this.uusername = uusername;
         this.uemail = uemail;
-        this.upassword = upassword;
     }
 
     public String getUname() {
@@ -26,7 +24,4 @@ public class Register {
         return uemail;
     }
 
-    public String getUpassword() {
-        return upassword;
-    }
 }

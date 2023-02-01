@@ -58,4 +58,14 @@ public class HomeActivity extends AppCompatActivity {
         }
         pressedTime = System.currentTimeMillis();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mAuth.getCurrentUser()!=null)
+        {
+            Intent change = new Intent(HomeActivity.this,HomeActivity.class);
+            startActivity(change);
+        }
+    }
 }

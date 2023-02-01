@@ -107,9 +107,15 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     }
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer.isDrawerOpen(GravityCompat.START))
+        {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        String currentFrag = String.valueOf(getSupportFragmentManager().findFragmentById(R.id.fragment_container));
+        if( currentFrag != "HomeFragment") {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+        }
+        else{
             super.onBackPressed();
         }
     }

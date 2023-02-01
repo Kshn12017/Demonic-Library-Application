@@ -54,7 +54,7 @@ public class ProfileFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container,false);
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     @Override
@@ -80,14 +80,11 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String profile = snapshot.getValue(String.class);
-                if(profile != null)
-                {
+                if (profile != null) {
                     Glide.with(ProfileFragment.this)
                             .load(profile)
                             .into(upic);
-                }
-                else
-                {
+                } else {
                     upic.setImageResource(R.drawable.user_icon);
                 }
             }
@@ -121,41 +118,41 @@ public class ProfileFragment extends Fragment {
                         upic.setImageURI(result);
 
                         storageRef.putFile(result).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
-                                    public void onSuccess(Uri uri) {
-                                        db.getReference().child("User_Details").child(name).child("profile").setValue(result.toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
-                                            }
-                                        })
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        db.getReference().child("User_Details").child(name).child("profile").setValue(result.toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void unused) {
+                                                                        Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        Intent change = new Intent(getActivity(), ProfileFragment.class);
+                                                                        startActivity(change);
+                                                                        Toast.makeText(getActivity(), "Task Failed", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                    }
+                                                })
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        Intent change = new Intent(getActivity(),ProfileFragment.class);
+                                                        Intent change = new Intent(getActivity(), ProfileFragment.class);
                                                         startActivity(change);
                                                         Toast.makeText(getActivity(), "Task Failed", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
                                     }
                                 })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Intent change = new Intent(getActivity(),ProfileFragment.class);
-                                                startActivity(change);
-                                                Toast.makeText(getActivity(), "Task Failed", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                            }
-                        })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Intent change = new Intent(getActivity(),ProfileFragment.class);
+                                        Intent change = new Intent(getActivity(), ProfileFragment.class);
                                         startActivity(change);
                                         Toast.makeText(getActivity(), "Task Failed", Toast.LENGTH_SHORT).show();
                                     }

@@ -12,7 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TestLibV1">
         <activity
-            android:name=".IATFVActivity"
+            android:name=".NovelViewActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ChapterActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".NovelHomeActivity"
             android:exported="false"
             android:theme="@style/Theme.TestLibV1.NoActionBar">
             <meta-data
@@ -22,7 +36,6 @@
         <activity
             android:name=".NavigationActivity"
             android:exported="true"
-            android:label="@string/title_activity_navigation"
             android:theme="@style/Theme.TestLibV1.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,9 +55,8 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".HomeActivity"
-            android:exported="false"
-            android:label="Home">
+            android:name=".AddingActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -55,7 +67,7 @@
         <activity
             android:name=".LoginActivity"
             android:exported="false"
-            android:noHistory="true"></activity>
+            android:noHistory="true" />
     </application>
 
 </manifest>

@@ -12,4 +12,27 @@
     <string name="menu_slideshow">Slideshow</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="check_it">Check it</string>
+    <string-array name="adds">
+        <item>Add Novel</item>
+        <item>Add Chapter</item>
+    </string-array>
+    <string-array name="novels">
+        <item>Duck Emperor Chronicles</item>
+        <item>I Became the Rich Second Generation Villain</item>
+        <item>I am the Fated Villain</item>
+        <item>I\'m Not That Kind of Talent</item>
+        <item>Logging 10,000 Years Into Future</item>
+        <item>My School Life Pretending to be a Worthless Person</item>
+        <item>Return of the Shattered Constellation</item>
+    </string-array>
+    <string-array name="status">
+        <item>Ongoing</item>
+        <item>Completed</item>
+        <item>Hiatus</item>
+    </string-array>
+    <string-array name="type">
+        <item>WebNovel</item>
+    </string-array>
+    <string name="link">null</string>
 </resources>

@@ -4,9 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,14 +17,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.bumptech.glide.Glide;
 import com.example.testlibv1.ui.ProfileFragment;
 import com.example.testlibv1.ui.gallery.GalleryFragment;
 import com.example.testlibv1.ui.home.HomeFragment;
 import com.example.testlibv1.ui.slideshow.SlideshowFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -41,8 +58,13 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     ProgressDialog progressDialog;
     String randomKey;
 
+    private long pressedTime;
+
     FirebaseAuth mAuth;
     FirebaseUser mUser;
+    DocumentReference docRef;
+    FirebaseFirestore db;
+    FirebaseDatabase fdb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +81,13 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        fdb = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         progressDialog = new ProgressDialog(this);
         randomKey = UUID.randomUUID().toString();
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -92,6 +114,9 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
             case R.id.nav_slideshow:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SlideshowFragment()).commit();
                 break;
+            case R.id.manage:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ManageFragment()).commit();
+                break;
             case R.id.profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 break;
@@ -105,31 +130,84 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START))
-        {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment currentFrag = fm.findFragmentById(R.id.fragment_container);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        String currentFrag = String.valueOf(getSupportFragmentManager().findFragmentById(R.id.fragment_container));
-        if( currentFrag != "HomeFragment") {
+        if (currentFrag instanceof HomeFragment) {
+            if (pressedTime + 2000 > System.currentTimeMillis()) {
+                super.onBackPressed();
+                finish();
+            } else {
+                Toast.makeText(getBaseContext(), "Press again to exit.", Toast.LENGTH_SHORT).show();
+            }
+            pressedTime = System.currentTimeMillis();
+        } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-        }
-        else{
-            super.onBackPressed();
         }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(mAuth.getCurrentUser()!=null)
-        {
-        }
-        else
-        {
-            Intent change = new Intent(NavigationActivity.this,LoginActivity.class);
+        if (mAuth.getCurrentUser() == null) {
+            Intent change = new Intent(NavigationActivity.this, LoginActivity.class);
             startActivity(change);
+        } else {
+
+            View headerView = navigationView.getHeaderView(0);
+            ShapeableImageView drawerImage = (ShapeableImageView) headerView.findViewById(R.id.uimage);
+            TextView drawerUsername = (TextView) headerView.findViewById(R.id.User_Name);
+            TextView drawerAccount = (TextView) headerView.findViewById(R.id.User_Email);
+
+            fdb.getReference().child("User_Details").child(mUser.getDisplayName()).child("profile").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String profile = snapshot.getValue(String.class);
+                    if (profile != null) {
+                        Glide.with(NavigationActivity.this).load(profile).into(drawerImage);
+                    } else {
+                        drawerImage.setImageResource(R.drawable.user_icon);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(NavigationActivity.this, "Task Cancelled.", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            drawerUsername.setText(mUser.getDisplayName());
+            drawerAccount.setText(mUser.getEmail());
+
+            db = FirebaseFirestore.getInstance();
+            try {
+                docRef = db.collection("Admins").document(mUser.getDisplayName());
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Toast.makeText(NavigationActivity.this, "Admin detected!", Toast.LENGTH_SHORT).show();
+                                Menu nav_menu = navigationView.getMenu();
+                                nav_menu.findItem(R.id.manage).setVisible(true);
+                                nav_menu.findItem(R.id.requests).setVisible(true);
+                            } else {
+                                Menu nav_menu = navigationView.getMenu();
+                                nav_menu.findItem(R.id.manage).setVisible(false);
+                                nav_menu.findItem(R.id.requests).setVisible(false);
+                            }
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                System.out.println("Exception");
+            }
         }
     }
 }

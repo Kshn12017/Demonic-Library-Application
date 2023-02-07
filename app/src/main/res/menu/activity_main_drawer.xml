@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group>
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_camera"
@@ -16,17 +16,31 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_slideshow" />
+        <item android:title="Admin">
+            <menu>
+                <item
+                    android:id="@+id/manage"
+                    android:icon="@drawable/ic_settings"
+                    android:title="Manage"
+                    android:visible="false"/>
+                <item
+                    android:id="@+id/requests"
+                    android:icon="@drawable/ic_request"
+                    android:title="Requests"
+                    android:visible="false"/>
+            </menu>
+        </item>
+        <item android:title="More">
+            <menu>
+                <item
+                    android:id="@+id/profile"
+                    android:icon="@drawable/ic_profile"
+                    android:title="My Profile"/>
+                <item
+                    android:id="@+id/logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="Logout" />
+            </menu>
+        </item>
     </group>
-    <item android:title="More">
-        <menu>
-            <item
-                android:id="@+id/profile"
-                android:icon="@drawable/ic_profile"
-                android:title="My Profile"/>
-            <item
-                android:id="@+id/logout"
-                android:icon="@drawable/ic_logout"
-                android:title="Logout" />
-        </menu>
-    </item>
 </menu>

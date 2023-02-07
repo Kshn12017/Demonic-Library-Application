@@ -10,26 +10,47 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="25dp"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/Home"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
-            app:iconifiedByDefault="false"
-            android:background="@drawable/search_round"
-            app:queryHint="Search" />
+            android:text="Home" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/linear3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </ScrollView>
+        <!--<View
+            android:id="@+id/novelView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"/>
+        -->
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="25dp">
+            android:visibility="gone">
 
             <TableLayout
                 android:id="@+id/novels"
@@ -50,33 +71,36 @@
                             android:layout_width="150dp"
                             android:layout_height="240dp"
                             android:gravity="center"
-                            app:srcCompat="@drawable/iatfv_cover"></ImageView>
+                            app:srcCompat="@drawable/iatfv_cover" />
 
                         <TextView
+                            android:id="@+id/iatfvtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="I am the Fated Villain"
                             android:textSize="20dp"
-                            android:textStyle="bold"></TextView>
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/sgv_layout"
                         android:gravity="center"
                         android:orientation="vertical">
 
                         <ImageView
                             android:layout_width="150dp"
                             android:layout_height="240dp"
-                            app:srcCompat="@drawable/sgv_cover"></ImageView>
+                            app:srcCompat="@drawable/sgv_cover" />
 
                         <TextView
+                            android:id="@+id/sgvtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="I Became the Rich Second Generation Villain"
                             android:textSize="20dp"
-                            android:textStyle="bold"></TextView>
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </TableRow>
 
@@ -92,7 +116,7 @@
                             android:layout_width="150dp"
                             android:layout_height="240dp"
                             android:gravity="center"
-                            app:srcCompat="@drawable/login_cover"></ImageView>
+                            app:srcCompat="@drawable/login_cover" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -100,7 +124,7 @@
                             android:gravity="center"
                             android:text="Logging 10,000 Years Into Future"
                             android:textSize="20dp"
-                            android:textStyle="bold"></TextView>
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -110,7 +134,7 @@
                         <ImageView
                             android:layout_width="150dp"
                             android:layout_height="240dp"
-                            app:srcCompat="@drawable/slpw_cover"></ImageView>
+                            app:srcCompat="@drawable/slpw_cover" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -118,9 +142,10 @@
                             android:gravity="center"
                             android:text="My School Life Pretending to be Worthless"
                             android:textSize="20dp"
-                            android:textStyle="bold"></TextView>
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -133,7 +158,7 @@
                             android:layout_width="150dp"
                             android:layout_height="240dp"
                             android:gravity="center"
-                            app:srcCompat="@drawable/rsc_cover"></ImageView>
+                            app:srcCompat="@drawable/rsc_cover" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -141,7 +166,7 @@
                             android:gravity="center"
                             android:text="Return of the Shattered Constellation"
                             android:textSize="20dp"
-                            android:textStyle="bold"></TextView>
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </TableRow>
             </TableLayout>

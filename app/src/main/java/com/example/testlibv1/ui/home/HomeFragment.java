@@ -7,31 +7,52 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.testlibv1.IATFVActivity;
-import com.example.testlibv1.LoginActivity;
-import com.example.testlibv1.NavigationActivity;
+import com.bumptech.glide.Glide;
+import com.example.testlibv1.NovelHomeActivity;
 import com.example.testlibv1.R;
-import com.example.testlibv1.databinding.FragmentHomeBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    LinearLayout iatfv_layout;
+    LinearLayout iatfv_layout, sgv_layout, linear3;
+    Button home;
+    TextView t1, iatfvtitle, sgvtitle;
+    ListView listview, listview2;
+    View novelView;
+
     FirebaseAuth mAuth;
+    FirebaseFirestore db;
+    FirebaseDatabase fdb;
+    DatabaseReference dbRef;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container,false);
+    List<String> novelname = new ArrayList<>();
+    List<String> coveruri = new ArrayList<>();
 
+
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override
@@ -39,18 +60,75 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        fdb = FirebaseDatabase.getInstance();
+        dbRef = fdb.getReference("Novels");
 
+        home = view.findViewById(R.id.Home);
+        sgv_layout = view.findViewById(R.id.sgv_layout);
         iatfv_layout = view.findViewById(R.id.iatfv_layout);
+        linear3 = view.findViewById(R.id.linear3);
+        t1 = view.findViewById(R.id.textView);
+        iatfvtitle = view.findViewById(R.id.iatfvtitle);
+        sgvtitle = view.findViewById(R.id.sgvtitle);
 
-        iatfv_layout.setOnClickListener(new View.OnClickListener() {
+        db.collection("Novels").whereEqualTo("Type", "WebNovel").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String value = document.getId();
+                        novelname.add(value);
+                        db.collection("Novels").document(value).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    String value2 = documentSnapshot.getString("Cover");
+                                    coveruri.add(value2);
+                                    layoutadd(value, value2);
+
+                                } else {
+                                    Toast.makeText(getActivity(), "Couldn't get image.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Unable to get name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void layoutadd(String value, String value2) {
+        LayoutInflater layout = getLayoutInflater();
+        View novelView = layout.inflate(R.layout.activity_novel_view, null);
+        linear3.addView(novelView);
+
+        ShapeableImageView novelCover = novelView.findViewById(R.id.novelCover);
+        TextView novelName = novelView.findViewById(R.id.novelName);
+
+        novelName.setText(value);
+        Glide.with(getActivity()).load(value2).into(novelCover);
+
+        novelView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent change = new Intent(getActivity(), IATFVActivity.class);
+                String chapter = (String) novelName.getText();
+                Intent change = new Intent(getActivity(), NovelHomeActivity.class);
+                change.putExtra("ChapName", chapter);
                 startActivity(change);
             }
         });
-
-
-
     }
 }

@@ -16,6 +16,7 @@
         android:layout_marginBottom="50dp">
 
         <TableLayout
+            android:id="@+id/tableLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"

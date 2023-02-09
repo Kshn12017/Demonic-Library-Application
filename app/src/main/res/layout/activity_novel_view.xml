@@ -6,8 +6,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="20dp"
-    tools:context=".NovelViewActivity">
+    android:padding="20dp">
 
     <com.google.android.material.imageview.ShapeableImageView
 

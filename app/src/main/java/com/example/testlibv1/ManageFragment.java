@@ -27,19 +27,16 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.example.testlibv1.ui.ProfileFragment;
+import com.example.testlibv1.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -60,13 +57,11 @@ public class ManageFragment extends Fragment {
 
     Button addNovel, addChap, imgBtn;
     CheckBox action_check, adventure_check, comedy_check, drama_check, fantasy_check, isekai_check, romance_check, wuxia_check;
-    TextInputLayout textInputLayout, textInputLayout3;
+    TextInputLayout textInputLayout;
     TextInputEditText noveltitle, description, author;
     AutoCompleteTextView autoCompleteTextView2, autoCompleteTextView3, autoCompleteTextView4, autoCompleteTextView5;
     View view1, view2;
 
-    FirebaseAuth mAuth;
-    FirebaseUser mUser;
     FirebaseFirestore db;
     DatabaseReference dbRef;
     FirebaseStorage fb;
@@ -74,12 +69,13 @@ public class ManageFragment extends Fragment {
     FirebaseDatabase fdb;
 
     ScrollView scroll1, scroll2;
-    LinearLayout layout, layout2;
+    LinearLayout layout;
 
     List<String> chapLink = new ArrayList<>();
     List<String> chapNum = new ArrayList<>();
     List<String> genreList = new ArrayList<>();
-    String checked, chapNumber, noveltitlestr, descriptionstr, authorstr, statusstr, typestr;
+    List<String> galleryList = new ArrayList<>();
+    String checked, chapNumber, noveltitlestr, descriptionstr, authorstr, statusstr, typestr, uristr;
     String novel;
     String actionstr, adventurestr, comedystr, dramastr, fantasystr, isekaistr, romancestr, wuxiastr;
 
@@ -109,7 +105,6 @@ public class ManageFragment extends Fragment {
         romance_check = view.findViewById(R.id.romance_check);
         wuxia_check = view.findViewById(R.id.wuxia_check);
         textInputLayout = view.findViewById(R.id.textInputLayout);
-        textInputLayout3 = view.findViewById(R.id.textInputLayout3);
         autoCompleteTextView2 = view.findViewById(R.id.autoCompleteTextView2);
         autoCompleteTextView3 = view.findViewById(R.id.autoCompleteTextView3);
         autoCompleteTextView4 = view.findViewById(R.id.autoCompleteTextView4);
@@ -117,17 +112,14 @@ public class ManageFragment extends Fragment {
         view1 = view.findViewById(R.id.view1);
         view2 = view.findViewById(R.id.view2);
         layout = view.findViewById(R.id.layout);
-        layout2 = view.findViewById(R.id.layout2);
         scroll1 = view.findViewById(R.id.scroll1);
         scroll2 = view.findViewById(R.id.scroll2);
 
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
         fdb = FirebaseDatabase.getInstance();
         dbRef = fdb.getReference();
         fb = FirebaseStorage.getInstance();
-        storageRef = fb.getReference().child("image");
+        storageRef = fb.getReference();
 
         autoCompleteTextView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -167,6 +159,32 @@ public class ManageFragment extends Fragment {
                     scroll1.setVisibility(View.VISIBLE);
                     Chapterlist_sgv();
                 }
+                if(novel.equals("Return of the Shattered Constellation")){
+                    layout.removeAllViews();
+                    scroll1.setVisibility(View.VISIBLE);
+                    Chapterlist_rsc();
+                }
+                if(novel.equals("Duck Emperor Chronicles")){
+                    layout.removeAllViews();
+                    scroll1.setVisibility(View.VISIBLE);
+                    Chapterlist_dec();
+                }
+                if(novel.equals("I'm Not That Kind of Talent")){
+                    layout.removeAllViews();
+                    scroll1.setVisibility(View.VISIBLE);
+                    Chapterlist_intkt();
+                }
+                if(novel.equals("Logging 10,000 Years Into Future")){
+                    layout.removeAllViews();
+                    scroll1.setVisibility(View.VISIBLE);
+                    Chapterlist_login();
+                }
+                if(novel.equals("My School Life Pretending to be a Worthless Person")){
+                    layout.removeAllViews();
+                    scroll1.setVisibility(View.VISIBLE);
+                    Chapterlist_slpw();
+                }
+
             }
         });
 
@@ -205,7 +223,6 @@ public class ManageFragment extends Fragment {
                         if (chapLi.contains(chapNo)) {
                             Map<String, Object> chapter = new HashMap<>();
                             chapter.put(chapNo, chapLi);
-
                             dbRef.child("Novels").child(novel).child("Chapter").updateChildren(chapter);
                         }
                     }
@@ -236,15 +253,17 @@ public class ManageFragment extends Fragment {
         novelcover = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
             @Override
             public void onActivityResult(Uri result) {
-                storageRef.putFile(result)
+                storageRef.child("novelimages/"+noveltitlestr).putFile(result)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                storageRef.child("novelimages/"+noveltitlestr).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         Toast.makeText(getActivity(), "Add all the details to make sure image is stored.", Toast.LENGTH_SHORT).show();
-                                        dbRef.child("Novels").child(noveltitlestr).child("Cover").setValue(uri.toString())
+                                        uristr = uri.toString();
+                                        galleryList.add(uristr);
+                                        dbRef.child("Novels").child(noveltitlestr).child("Cover").setValue(uristr)
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void unused) {
@@ -286,11 +305,6 @@ public class ManageFragment extends Fragment {
         descriptionstr = description.getText().toString();
         authorstr = author.getText().toString();
         checks();
-        /*System.out.println(noveltitlestr);
-        System.out.println(descriptionstr);
-        System.out.println(authorstr);
-        System.out.println(statusstr);
-        System.out.println(genreList);*/
         System.out.println(noveltitlestr);
         if (noveltitlestr != null && !noveltitlestr.isEmpty()) {
             dbRef.child("Novels").child(noveltitlestr).child("Title").addValueEventListener(new ValueEventListener() {
@@ -320,7 +334,7 @@ public class ManageFragment extends Fragment {
                                                         dbRef.child("Novels").child(noveltitlestr).addListenerForSingleValueEvent(new ValueEventListener() {
                                                             @Override
                                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                Map<String, Object> values = new HashMap<String, Object>();
+                                                                Map<String, Object> values = new HashMap<>();
                                                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                                                     values.put(snapshot.getKey(), snapshot.getValue());
                                                                 }
@@ -330,11 +344,14 @@ public class ManageFragment extends Fragment {
                                                                 values.put("Genre", genreList);
                                                                 values.put("Author", authorstr);
                                                                 values.put("Status", statusstr);
+                                                                values.put("Gallery",galleryList);
                                                                 db.collection("Novels").document(noveltitlestr)
                                                                                 .set(values).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                             @Override
                                                                             public void onSuccess(Void unused) {
                                                                                 Toast.makeText(getActivity(), "Values added", Toast.LENGTH_SHORT).show();
+                                                                                Intent change = new Intent(getActivity(), HomeFragment.class);
+                                                                                startActivity(change);
                                                                             }
                                                                         }).addOnFailureListener(new OnFailureListener() {
                                                                             @Override
@@ -342,9 +359,6 @@ public class ManageFragment extends Fragment {
                                                                                 Toast.makeText(getActivity(), "Adding failed.", Toast.LENGTH_SHORT).show();
                                                                             }
                                                                         });
-                                                                /*dbRef.child("Novels").child(noveltitlestr).updateChildren(values);
-                                                                dbRef.child("Novel List").child(noveltitlestr).setValue(noveltitlestr);
-                                                                Toast.makeText(getActivity(), "Novel Succesfully Added.", Toast.LENGTH_SHORT).show();*/
                                                             }
 
                                                             @Override
@@ -475,7 +489,7 @@ public class ManageFragment extends Fragment {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                content.append(line + "\n");
+                content.append(line).append("\n");
             }
             bufferedReader.close();
 
@@ -544,7 +558,7 @@ public class ManageFragment extends Fragment {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                content.append(line + "\n");
+                content.append(line).append("\n");
             }
             bufferedReader.close();
 
@@ -596,7 +610,350 @@ public class ManageFragment extends Fragment {
         }
     }
 
-    //Add list getter for other 5 novels too.
+    private void Chapterlist_login(){
+        Toast.makeText(getActivity(), "Please wait before selecting the chapters to add.", Toast.LENGTH_SHORT).show();
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy gfgPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(gfgPolicy);
+        }
+
+        String theUrl = "https://demonictl.com/novel/logging-10000-years-into-the-future/chapter-1-nightmares/";
+        StringBuilder content = new StringBuilder();
+        try {
+            String pageUrl = theUrl;
+            URL url = new URL(pageUrl);
+            URLConnection urlConnection = url.openConnection();
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+            bufferedReader.close();
+
+            String str = content.toString();
+
+            List<String> list = new ArrayList<>();
+
+            String regex = "\\b((?:https?|ftp|file):" + "//[-a-zA-Z0-9+&@#/%?=" + "~_|!:, .;]*[-a-zA-Z0-9+" + "&@#/%=~_|])";
+
+            Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+
+            Matcher m = p.matcher(str);
+
+            while (m.find()) {
+                String str2 = str.substring(m.start(0), m.end(0));
+                if (!list.contains(str2)) {
+                    list.add(str2);
+                }
+            }
+
+            if (list.size() == 0) {
+                System.out.println("-1");
+            }
+
+            for (String finUrl : list) {
+                if (finUrl.contains("/logging-10000-years-into-the-future/chapter-")) {
+                    CheckBox checkBox = new CheckBox(getActivity());
+                    checkBox.setText(finUrl);
+                    checkBox.setTextSize(25);
+                    checkBox.setPadding(1, 20, 1, 20);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.gravity = Gravity.CENTER_HORIZONTAL;
+                    checkBox.setLayoutParams(params);
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (checkBox.isChecked()) {
+                                geturl_login(finUrl);
+                            } else {
+                                removeurl(finUrl);
+                            }
+                        }
+                    });
+                    layout.addView(checkBox);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void Chapterlist_rsc(){
+        Toast.makeText(getActivity(), "Please wait before selecting the chapters to add.", Toast.LENGTH_SHORT).show();
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy gfgPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(gfgPolicy);
+        }
+
+        String theUrl = "https://demonictl.com/novel/return-of-the-shattered-constellation/return-of-the-shattered-constellation-chapter-1/";
+        StringBuilder content = new StringBuilder();
+        try {
+            String pageUrl = theUrl;
+            URL url = new URL(pageUrl);
+            URLConnection urlConnection = url.openConnection();
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+            bufferedReader.close();
+
+            String str = content.toString();
+
+            List<String> list = new ArrayList<>();
+
+            String regex = "\\b((?:https?|ftp|file):" + "//[-a-zA-Z0-9+&@#/%?=" + "~_|!:, .;]*[-a-zA-Z0-9+" + "&@#/%=~_|])";
+
+            Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+
+            Matcher m = p.matcher(str);
+
+            while (m.find()) {
+                String str2 = str.substring(m.start(0), m.end(0));
+                if (!list.contains(str2)) {
+                    list.add(str2);
+                }
+            }
+
+            if (list.size() == 0) {
+                System.out.println("-1");
+            }
+
+            for (String finUrl : list) {
+                if (finUrl.contains("/return-of-the-shattered-constellation-chapter-")) {
+                    CheckBox checkBox = new CheckBox(getActivity());
+                    checkBox.setText(finUrl);
+                    checkBox.setTextSize(25);
+                    checkBox.setPadding(1, 20, 1, 20);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.gravity = Gravity.CENTER_HORIZONTAL;
+                    checkBox.setLayoutParams(params);
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (checkBox.isChecked()) {
+                                geturl_rsc(finUrl);
+                            } else {
+                                removeurl(finUrl);
+                            }
+                        }
+                    });
+                    layout.addView(checkBox);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void Chapterlist_slpw(){
+        Toast.makeText(getActivity(), "Please wait before selecting the chapters to add.", Toast.LENGTH_SHORT).show();
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy gfgPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(gfgPolicy);
+        }
+
+        String theUrl = "https://demonictl.com/novel/my-school-life-pretending-to-be-a-worthless-person/my-school-life-pretending-to-be-a-worthless-person-prologue/";
+        StringBuilder content = new StringBuilder();
+        try {
+            String pageUrl = theUrl;
+            URL url = new URL(pageUrl);
+            URLConnection urlConnection = url.openConnection();
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+            bufferedReader.close();
+
+            String str = content.toString();
+
+            List<String> list = new ArrayList<>();
+
+            String regex = "\\b((?:https?|ftp|file):" + "//[-a-zA-Z0-9+&@#/%?=" + "~_|!:, .;]*[-a-zA-Z0-9+" + "&@#/%=~_|])";
+
+            Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+
+            Matcher m = p.matcher(str);
+
+            while (m.find()) {
+                String str2 = str.substring(m.start(0), m.end(0));
+                if (!list.contains(str2)) {
+                    list.add(str2);
+                }
+            }
+
+            if (list.size() == 0) {
+                System.out.println("-1");
+            }
+
+            for (String finUrl : list) {
+                if (finUrl.contains("/my-school-life-pretending-to-be-a-worthless-person/my-school-life-pretending-to-be-a-worthless-person-")) {
+                    CheckBox checkBox = new CheckBox(getActivity());
+                    checkBox.setText(finUrl);
+                    checkBox.setTextSize(25);
+                    checkBox.setPadding(1, 20, 1, 20);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.gravity = Gravity.CENTER_HORIZONTAL;
+                    checkBox.setLayoutParams(params);
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (checkBox.isChecked()) {
+                                geturl_slpw(finUrl);
+                            } else {
+                                removeurl(finUrl);
+                            }
+                        }
+                    });
+                    layout.addView(checkBox);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void Chapterlist_dec(){
+        Toast.makeText(getActivity(), "Please wait before selecting the chapters to add.", Toast.LENGTH_SHORT).show();
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy gfgPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(gfgPolicy);
+        }
+
+        String theUrl = "https://demonictl.com/novel/duck-emperor-chronicles/duck-emperor-chronicles-prologue-1/";
+        StringBuilder content = new StringBuilder();
+        try {
+            String pageUrl = theUrl;
+            URL url = new URL(pageUrl);
+            URLConnection urlConnection = url.openConnection();
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+            bufferedReader.close();
+
+            String str = content.toString();
+
+            List<String> list = new ArrayList<>();
+
+            String regex = "\\b((?:https?|ftp|file):" + "//[-a-zA-Z0-9+&@#/%?=" + "~_|!:, .;]*[-a-zA-Z0-9+" + "&@#/%=~_|])";
+
+            Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+
+            Matcher m = p.matcher(str);
+
+            while (m.find()) {
+                String str2 = str.substring(m.start(0), m.end(0));
+                if (!list.contains(str2)) {
+                    list.add(str2);
+                }
+            }
+
+            if (list.size() == 0) {
+                System.out.println("-1");
+            }
+
+            for (String finUrl : list) {
+                if (finUrl.contains("/duck-emperor-chronicles/duck-emperor-chronicles-")) {
+                    CheckBox checkBox = new CheckBox(getActivity());
+                    checkBox.setText(finUrl);
+                    checkBox.setTextSize(25);
+                    checkBox.setPadding(1, 20, 1, 20);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.gravity = Gravity.CENTER_HORIZONTAL;
+                    checkBox.setLayoutParams(params);
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (checkBox.isChecked()) {
+                                geturl_dec(finUrl);
+                            } else {
+                                removeurl(finUrl);
+                            }
+                        }
+                    });
+                    layout.addView(checkBox);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void Chapterlist_intkt(){
+        Toast.makeText(getActivity(), "Please wait before selecting the chapters to add.", Toast.LENGTH_SHORT).show();
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy gfgPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(gfgPolicy);
+        }
+
+        String theUrl = "https://demonictl.com/novel/im-not-that-kind-of-talent/chapter-1-the-demon-kings-strongest-hand-1/";
+        StringBuilder content = new StringBuilder();
+        try {
+            String pageUrl = theUrl;
+            URL url = new URL(pageUrl);
+            URLConnection urlConnection = url.openConnection();
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+            bufferedReader.close();
+
+            String str = content.toString();
+
+            List<String> list = new ArrayList<>();
+
+            String regex = "\\b((?:https?|ftp|file):" + "//[-a-zA-Z0-9+&@#/%?=" + "~_|!:, .;]*[-a-zA-Z0-9+" + "&@#/%=~_|])";
+
+            Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+
+            Matcher m = p.matcher(str);
+
+            while (m.find()) {
+                String str2 = str.substring(m.start(0), m.end(0));
+                if (!list.contains(str2)) {
+                    list.add(str2);
+                }
+            }
+
+            if (list.size() == 0) {
+                System.out.println("-1");
+            }
+
+            for (String finUrl : list) {
+                if (finUrl.contains("/im-not-that-kind-of-talent/chapter-")) {
+                    CheckBox checkBox = new CheckBox(getActivity());
+                    checkBox.setText(finUrl);
+                    checkBox.setTextSize(25);
+                    checkBox.setPadding(1, 20, 1, 20);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.gravity = Gravity.CENTER_HORIZONTAL;
+                    checkBox.setLayoutParams(params);
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (checkBox.isChecked()) {
+                                geturl_intkt(finUrl);
+                            } else {
+                                removeurl(finUrl);
+                            }
+                        }
+                    });
+                    layout.addView(checkBox);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void geturl_iatfv(String finUrl) {
         checked = finUrl;
@@ -613,6 +970,66 @@ public class ManageFragment extends Fragment {
     private void geturl_sgv(String finUrl){
         checked = finUrl;
         chapNumber = checked.replace("https://demonictl.com/novel/i-became-the-rich-second-generation-villain/i-became-the-rich-second-generation-villain-", "");
+        chapNumber = chapNumber.replace("/", "");
+        if (!chapLink.contains(checked)) {
+            chapLink.add(checked);
+        }
+        if (!chapNum.contains(chapNumber)) {
+            chapNum.add(chapNumber);
+        }
+    }
+
+    private void geturl_login(String finUrl) {
+        checked = finUrl;
+        chapNumber = checked.replace("https://demonictl.com/novel/logging-10000-years-into-the-future/", "");
+        chapNumber = chapNumber.replace("/", "");
+        if (!chapLink.contains(checked)) {
+            chapLink.add(checked);
+        }
+        if (!chapNum.contains(chapNumber)) {
+            chapNum.add(chapNumber);
+        }
+    }
+
+    private void geturl_rsc(String finUrl) {
+        checked = finUrl;
+        chapNumber = checked.replace("https://demonictl.com/novel/return-of-the-shattered-constellation/return-of-the-shattered-constellation-", "");
+        chapNumber = chapNumber.replace("/", "");
+        if (!chapLink.contains(checked)) {
+            chapLink.add(checked);
+        }
+        if (!chapNum.contains(chapNumber)) {
+            chapNum.add(chapNumber);
+        }
+    }
+
+    private void geturl_slpw(String finUrl) {
+        checked = finUrl;
+        chapNumber = checked.replace("https://demonictl.com/novel/my-school-life-pretending-to-be-a-worthless-person/my-school-life-pretending-to-be-a-worthless-person-", "");
+        chapNumber = chapNumber.replace("/", "");
+        if (!chapLink.contains(checked)) {
+            chapLink.add(checked);
+        }
+        if (!chapNum.contains(chapNumber)) {
+            chapNum.add(chapNumber);
+        }
+    }
+
+    private void geturl_dec(String finUrl) {
+        checked = finUrl;
+        chapNumber = checked.replace("https://demonictl.com/novel/duck-emperor-chronicles/duck-emperor-chronicles-", "");
+        chapNumber = chapNumber.replace("/", "");
+        if (!chapLink.contains(checked)) {
+            chapLink.add(checked);
+        }
+        if (!chapNum.contains(chapNumber)) {
+            chapNum.add(chapNumber);
+        }
+    }
+
+    private void geturl_intkt(String finUrl) {
+        checked = finUrl;
+        chapNumber = checked.replace("https://demonictl.com/novel/im-not-that-kind-of-talent/", "");
         chapNumber = chapNumber.replace("/", "");
         if (!chapLink.contains(checked)) {
             chapLink.add(checked);

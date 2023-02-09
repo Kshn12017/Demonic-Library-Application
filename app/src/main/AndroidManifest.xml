@@ -11,13 +11,7 @@
         android:roundIcon="@drawable/logo2"
         android:supportsRtl="true"
         android:theme="@style/Theme.TestLibV1">
-        <activity
-            android:name=".NovelViewActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+
         <activity
             android:name=".ChapterActivity"
             android:exported="false">
@@ -49,13 +43,6 @@
         </activity>
         <activity
             android:name=".ForgotPassword"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".AddingActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

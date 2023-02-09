@@ -24,6 +24,11 @@
                     android:title="Manage"
                     android:visible="false"/>
                 <item
+                    android:id="@+id/pic"
+                    android:icon="@drawable/ic_image"
+                    android:title="Pic Upload"
+                    android:visible="false"/>
+                <item
                     android:id="@+id/requests"
                     android:icon="@drawable/ic_request"
                     android:title="Requests"

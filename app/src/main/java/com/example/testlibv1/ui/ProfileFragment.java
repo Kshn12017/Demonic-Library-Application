@@ -1,8 +1,11 @@
 package com.example.testlibv1.ui;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +37,7 @@ import com.google.firebase.storage.UploadTask;
 
 public class ProfileFragment extends Fragment {
 
-    TextView t1, t2, t3, t4, t5, t6;
+    TextView t2, t4, t6;
     ImageView upic;
 
     FirebaseDatabase db;
@@ -53,17 +56,14 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        t1 = view.findViewById(R.id.textview1);
         t2 = view.findViewById(R.id.textview2);
-        t3 = view.findViewById(R.id.textview3);
         t4 = view.findViewById(R.id.textview4);
-        t5 = view.findViewById(R.id.textview5);
         t6 = view.findViewById(R.id.textview6);
         upic = view.findViewById(R.id.uimage);
 
         db = FirebaseDatabase.getInstance();
         fb = FirebaseStorage.getInstance();
-        storageRef = fb.getReference().child("image");
+        storageRef = fb.getReference();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         String name = mUser.getDisplayName();
@@ -71,6 +71,9 @@ public class ProfileFragment extends Fragment {
         db.getReference().child("User_Details").child(name).child("profile").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (getActivity() == null) {
+                    return;
+                }
                 String profile = snapshot.getValue(String.class);
                 if (profile != null) {
                     Glide.with(ProfileFragment.this).load(profile).into(upic);
@@ -103,14 +106,16 @@ public class ProfileFragment extends Fragment {
         picSelect = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
             @Override
             public void onActivityResult(Uri result) {
-                upic.setImageURI(result);
-                storageRef.putFile(result).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                storageRef.child("image/profile_" + mUser.getDisplayName()).putFile(result).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        storageRef.child("image/profile_" + mUser.getDisplayName()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                db.getReference().child("User_Details").child(name).child("profile").setValue(uri.toString())
+                                upic.setImageURI(null);
+                                String uristr = uri.toString();
+                                Log.d(TAG, "uristr: " + uristr);
+                                db.getReference().child("User_Details").child(name).child("profile").setValue(uristr)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
@@ -174,9 +179,4 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
-    /*private void sendToNextActivity() {
-        Intent change = new Intent(ProfileFragment.this, EditActivity.class);
-        startActivity(change);
-    }*/
 }

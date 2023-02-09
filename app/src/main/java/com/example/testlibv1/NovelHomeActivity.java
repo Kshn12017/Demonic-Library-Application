@@ -1,13 +1,10 @@
 package com.example.testlibv1;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,8 +19,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.testlibv1.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,8 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,16 +34,10 @@ import java.util.List;
 public class NovelHomeActivity extends AppCompatActivity {
 
     FirebaseDatabase fdb;
-    FirebaseStorage fb;
-    StorageReference storageRef;
-    FirebaseAuth mAuth;
-    FirebaseUser mUser;
     DatabaseReference dbRef;
     FirebaseFirestore db;
 
     RelativeLayout relative_layout;
-
-    ArrayList<String> list;
 
     List<String> novellist = new ArrayList<>();
     List<String> novellink = new ArrayList<>();
@@ -60,7 +47,7 @@ public class NovelHomeActivity extends AppCompatActivity {
     TextView noveltitle, genre, author, status, description;
     ListView novel_list;
 
-    String chapter;
+    String novelname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +74,10 @@ public class NovelHomeActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            chapter = extras.getString("ChapName");
+            novelname = extras.getString("NovelName");
         }
 
-        db.collection("Novels").document(chapter).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        db.collection("Novels").document(novelname).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 noveltitle.setText(documentSnapshot.getString("Title"));
@@ -113,7 +100,7 @@ public class NovelHomeActivity extends AppCompatActivity {
             }
         });
 
-        fdb.getReference().child("Novels").child(chapter).child("Cover").addValueEventListener(new ValueEventListener() {
+        fdb.getReference().child("Novels").child(novelname).child("Cover").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String coverdb = snapshot.getValue(String.class);
@@ -130,13 +117,13 @@ public class NovelHomeActivity extends AppCompatActivity {
         });
 
         if (novellist.isEmpty()) {
-            dbRef.child(chapter).child("Chapter").addValueEventListener(new ValueEventListener() {
+            dbRef.child(novelname).child("Chapter").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    HashMap<String, Object> values = new HashMap<String, Object>();
+                    HashMap<String, Object> values = new HashMap<>();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         novellist.add(dataSnapshot.getKey());
-                        ArrayAdapter adapter = new ArrayAdapter<String>(NovelHomeActivity.this, R.layout.dropdown, novellist);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(NovelHomeActivity.this, R.layout.dropdown, novellist);
                         novel_list.setAdapter(adapter);
                         novellink.add((String) dataSnapshot.getValue());
                         values.put(dataSnapshot.getKey(), dataSnapshot.getValue());
@@ -161,14 +148,9 @@ public class NovelHomeActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent change = new Intent(NovelHomeActivity.this, HomeFragment.class);
+                Intent change = new Intent(NovelHomeActivity.this,NavigationActivity.class);
                 startActivity(change);
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 }

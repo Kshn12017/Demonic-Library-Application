@@ -16,7 +16,6 @@
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout2"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -120,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Novel Title:"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -144,11 +143,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Novel Type:"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout5"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -170,7 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Description:"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -198,7 +196,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Genre:"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TableLayout
@@ -215,21 +213,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Action"
-                        android:textSize="18dp" />
+                        android:textSize="18sp" />
 
                     <CheckBox
                         android:id="@+id/adventure_check"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Adventure"
-                        android:textSize="18dp" />
+                        android:textSize="18sp" />
 
                     <CheckBox
                         android:id="@+id/comedy_check"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Comedy"
-                        android:textSize="18dp" />
+                        android:textSize="18sp" />
 
                 </TableRow>
 
@@ -242,21 +240,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Drama"
-                        android:textSize="18dp" />
+                        android:textSize="18sp" />
 
                     <CheckBox
                         android:id="@+id/fantasy_check"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Fantasy"
-                        android:textSize="18dp" />
+                        android:textSize="18sp" />
 
                     <CheckBox
                         android:id="@+id/isekai_check"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Isekai"
-                        android:textSize="18dp" />
+                        android:textSize="18sp" />
 
                 </TableRow>
 
@@ -269,14 +267,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Romance"
-                        android:textSize="18dp" />
+                        android:textSize="18sp" />
 
                     <CheckBox
                         android:id="@+id/wuxia_check"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Wuxia"
-                        android:textSize="18dp" />
+                        android:textSize="18sp" />
 
                 </TableRow>
             </TableLayout>
@@ -289,7 +287,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Author:"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -312,11 +310,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Status:"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout4"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

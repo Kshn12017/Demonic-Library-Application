@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +21,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,16 +31,9 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    LinearLayout iatfv_layout, sgv_layout, linear3;
-    Button home;
-    TextView t1, iatfvtitle, sgvtitle;
-    ListView listview, listview2;
-    View novelView;
+    LinearLayout linear3;
 
-    FirebaseAuth mAuth;
     FirebaseFirestore db;
-    FirebaseDatabase fdb;
-    DatabaseReference dbRef;
 
     List<String> novelname = new ArrayList<>();
     List<String> coveruri = new ArrayList<>();
@@ -59,18 +47,9 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        fdb = FirebaseDatabase.getInstance();
-        dbRef = fdb.getReference("Novels");
 
-        home = view.findViewById(R.id.Home);
-        sgv_layout = view.findViewById(R.id.sgv_layout);
-        iatfv_layout = view.findViewById(R.id.iatfv_layout);
         linear3 = view.findViewById(R.id.linear3);
-        t1 = view.findViewById(R.id.textView);
-        iatfvtitle = view.findViewById(R.id.iatfvtitle);
-        sgvtitle = view.findViewById(R.id.sgvtitle);
 
         db.collection("Novels").whereEqualTo("Type", "WebNovel").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -126,7 +105,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 String chapter = (String) novelName.getText();
                 Intent change = new Intent(getActivity(), NovelHomeActivity.class);
-                change.putExtra("ChapName", chapter);
+                change.putExtra("NovelName", chapter);
                 startActivity(change);
             }
         });

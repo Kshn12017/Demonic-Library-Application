@@ -23,14 +23,13 @@
             android:layout_marginBottom="10dp"
             android:background="#FF5555"
             app:srcCompat="@drawable/user_icon"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent">
-        </com.google.android.material.imageview.ShapeableImageView>
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="30dp"></TextView>
+            android:layout_marginBottom="30dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -56,14 +55,14 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="Username"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textview2"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="username"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
             </TableRow>
 
             <View
@@ -80,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="Name"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textview4"
@@ -88,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="name"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
             </TableRow>
 
             <View
@@ -105,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="Email"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textview6"
@@ -113,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="email"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
             </TableRow>
 
             <View

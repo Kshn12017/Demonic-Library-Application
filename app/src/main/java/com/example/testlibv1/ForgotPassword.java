@@ -8,24 +8,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class ForgotPassword extends AppCompatActivity {
 
     EditText Femail;
     Button Fpassword;
-    TextView skip;
 
     String email;
 
     FirebaseAuth mAuth;
-    FirebaseUser mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +32,6 @@ public class ForgotPassword extends AppCompatActivity {
         Fpassword = findViewById(R.id.Fpassword);
 
         mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
 
         Fpassword.setOnClickListener(new View.OnClickListener() {
             @Override

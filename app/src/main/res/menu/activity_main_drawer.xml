@@ -14,8 +14,8 @@
             android:title="@string/menu_gallery" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:icon="@drawable/ic_request"
+            android:title="Request" />
         <item android:title="Admin">
             <menu>
                 <item
@@ -30,7 +30,7 @@
                     android:visible="false"/>
                 <item
                     android:id="@+id/requests"
-                    android:icon="@drawable/ic_request"
+                    android:icon="@drawable/ic_requests"
                     android:title="Requests"
                     android:visible="false"/>
             </menu>

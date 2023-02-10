@@ -27,7 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.example.testlibv1.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -267,7 +266,7 @@ public class ManageFragment extends Fragment {
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void unused) {
-                                                        Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(getActivity(), "Successful", Toast.LENGTH_SHORT).show();
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {
                                                     @Override
@@ -349,8 +348,8 @@ public class ManageFragment extends Fragment {
                                                                                 .set(values).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                             @Override
                                                                             public void onSuccess(Void unused) {
-                                                                                Toast.makeText(getActivity(), "Values added", Toast.LENGTH_SHORT).show();
-                                                                                Intent change = new Intent(getActivity(), HomeFragment.class);
+                                                                                Toast.makeText(getActivity(), "Novel Added", Toast.LENGTH_SHORT).show();
+                                                                                Intent change = new Intent(getActivity(), NavigationActivity.class);
                                                                                 startActivity(change);
                                                                             }
                                                                         }).addOnFailureListener(new OnFailureListener() {

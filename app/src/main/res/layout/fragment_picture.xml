@@ -41,9 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout1"
-        android:visibility="gone"
         android:gravity="center"
-        android:text="Upload"/>
+        android:text="Upload More"/>
 
     <View
         android:id="@+id/view1"

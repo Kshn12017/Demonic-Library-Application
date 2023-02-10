@@ -25,7 +25,6 @@ public class RegisterActivity extends AppCompatActivity {
     EditText name, username, email, password, c_password;
     Button register, cancel;
     FirebaseAuth mAuth;
-    FirebaseUser mUser;
     DatabaseReference db;
 
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
@@ -47,7 +46,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
         db = FirebaseDatabase.getInstance().getReference().child("User_Details");
 
         register.setOnClickListener(new View.OnClickListener() {

@@ -2,17 +2,7 @@ package com.example.testlibv1.ui.gallery;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,37 +10,22 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.testlibv1.NavigationActivity;
 import com.example.testlibv1.R;
-import com.example.testlibv1.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class GalleryFragment extends Fragment {
 
@@ -88,7 +63,6 @@ public class GalleryFragment extends Fragment {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 ArrayList values = (ArrayList) document.get("Gallery");
-                                Log.d(TAG, "values: " + values);
                                 for (Object images : values) {
                                     String imgstr = String.valueOf(images);
                                     Log.d(TAG, "imgstr: " + imgstr);

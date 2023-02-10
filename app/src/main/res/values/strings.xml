@@ -26,6 +26,10 @@
     <string-array name="type">
         <item>WebNovel</item>
     </string-array>
+    <string-array name="yes_no">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

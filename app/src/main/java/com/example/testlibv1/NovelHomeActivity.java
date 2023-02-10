@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.testlibv1.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,7 +40,6 @@ public class NovelHomeActivity extends AppCompatActivity {
     List<String> novellist = new ArrayList<>();
     List<String> novellink = new ArrayList<>();
 
-    Button back;
     ImageView cover;
     TextView noveltitle, genre, author, status, description;
     ListView novel_list;
@@ -63,7 +60,6 @@ public class NovelHomeActivity extends AppCompatActivity {
         relative_layout = findViewById(R.id.relative_layout);
         relative_layout.addView(view);
 
-        back = view.findViewById(R.id.back);
         cover = view.findViewById(R.id.coverimage);
         noveltitle = view.findViewById(R.id.noveltitle);
         genre = view.findViewById(R.id.genre);
@@ -145,12 +141,5 @@ public class NovelHomeActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError error) {}
             });
         }
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent change = new Intent(NovelHomeActivity.this,NavigationActivity.class);
-                startActivity(change);
-            }
-        });
     }
 }

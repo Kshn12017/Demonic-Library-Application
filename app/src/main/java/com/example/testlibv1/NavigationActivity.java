@@ -21,7 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.testlibv1.ui.ProfileFragment;
 import com.example.testlibv1.ui.gallery.GalleryFragment;
 import com.example.testlibv1.ui.home.HomeFragment;
-import com.example.testlibv1.ui.slideshow.SlideshowFragment;
+import com.example.testlibv1.ui.request.RequestFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -89,7 +89,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GalleryFragment()).commit();
                 break;
             case R.id.nav_slideshow:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SlideshowFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RequestFragment()).commit();
                 break;
             case R.id.manage:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ManageFragment()).commit();
@@ -98,7 +98,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PictureFragment()).commit();
                 break;
             case R.id.requests:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RequestFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RequestsFragment()).commit();
                 break;
             case R.id.profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
@@ -124,13 +124,13 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         if (currentFrag instanceof HomeFragment) {
             if (pressedTime + 2000 > System.currentTimeMillis()) {
                 super.onBackPressed();
-                finish();
             } else {
                 Toast.makeText(getBaseContext(), "Press again to exit.", Toast.LENGTH_SHORT).show();
             }
             pressedTime = System.currentTimeMillis();
         } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            finish();
         }
     }
 

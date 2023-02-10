@@ -23,7 +23,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,9 +30,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -54,12 +51,9 @@ public class PictureFragment extends Fragment {
     LinearLayout linear2;
 
     FirebaseAuth mAuth;
-    FirebaseUser mUser;
     FirebaseFirestore db;
-    FirebaseDatabase fdb;
     FirebaseStorage fb;
     StorageReference storageRef;
-    DocumentReference docRef;
 
     String novelstr;
 
@@ -82,9 +76,7 @@ public class PictureFragment extends Fragment {
         linear2 = view.findViewById(R.id.linear2);
 
         mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
-        fdb = FirebaseDatabase.getInstance();
         fb = FirebaseStorage.getInstance();
         storageRef = fb.getReference();
 
@@ -179,31 +171,5 @@ public class PictureFragment extends Fragment {
         super.onResume();
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.novels, R.layout.dropdown);
         autoCompleteTextView.setAdapter(adapter);
-        autoCompleteTextView.setText(null);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        db = FirebaseFirestore.getInstance();
-        try {
-            docRef = db.collection("Admins").document(mUser.getDisplayName());
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Toast.makeText(getActivity(), "Admin detected!", Toast.LENGTH_SHORT).show();
-                            addImage.setVisibility(View.VISIBLE);
-                        } else {
-                            addImage.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                }
-            });
-        } catch (Exception e) {
-            System.out.println("Exception");
-        }
     }
 }

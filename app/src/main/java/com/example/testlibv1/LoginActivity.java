@@ -25,7 +25,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView forgotpass;
 
     FirebaseAuth mAuth;
-    FirebaseUser mUser;
 
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
@@ -44,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override

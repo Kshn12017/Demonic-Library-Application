@@ -119,7 +119,7 @@ public class ProfileFragment extends Fragment {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
-                                                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getActivity(), "Successful", Toast.LENGTH_SHORT).show();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override

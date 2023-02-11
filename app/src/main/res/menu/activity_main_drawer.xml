@@ -35,7 +35,7 @@
                     android:visible="false"/>
             </menu>
         </item>
-        <item android:title="More">
+        <item android:title="User">
             <menu>
                 <item
                     android:id="@+id/profile"
@@ -45,6 +45,18 @@
                     android:id="@+id/logout"
                     android:icon="@drawable/ic_logout"
                     android:title="Logout" />
+            </menu>
+        </item>
+        <item android:title="More">
+            <menu>
+                <item
+                    android:id="@+id/coffee"
+                    android:icon="@drawable/ic_coffee"
+                    android:title="Buy Me A Coffee"/>
+                <item
+                    android:id="@+id/discord"
+                    android:icon="@drawable/ic_discord"
+                    android:title="Discord" />
             </menu>
         </item>
     </group>

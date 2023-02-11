@@ -3,6 +3,7 @@ package com.example.testlibv1.ui.gallery;
 import static android.content.ContentValues.TAG;
 
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ public class GalleryFragment extends Fragment {
 
     AutoCompleteTextView autoCompleteTextView;
     LinearLayout linear2;
+    TextView clicktext, imagelink;
 
     FirebaseFirestore db;
 
@@ -48,6 +50,8 @@ public class GalleryFragment extends Fragment {
 
         autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
         linear2 = view.findViewById(R.id.linear2);
+        clicktext = view.findViewById(R.id.clicktext);
+        imagelink = view.findViewById(R.id.imagelink);
 
         db = FirebaseFirestore.getInstance();
 
@@ -55,6 +59,7 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 linear2.removeAllViews();
+                clicktext.setVisibility(View.VISIBLE);
                 novelstr = autoCompleteTextView.getText().toString();
                 db.collection("Novels").document(novelstr).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -87,6 +92,14 @@ public class GalleryFragment extends Fragment {
 
         novelName.setVisibility(View.GONE);
         Glide.with(GalleryFragment.this).load(gallerystr).into(novelCover);
+
+        novelCover.setClickable(true);
+        novelCover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imagelink.setText(gallerystr);
+            }
+        });
     }
 
     @Override

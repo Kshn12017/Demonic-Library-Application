@@ -109,6 +109,12 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 Toast.makeText(this, "Successfully Logged Out.", Toast.LENGTH_SHORT).show();
                 startActivity(change);
                 break;
+            case R.id.coffee:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CoffeeFragment()).commit();
+                break;
+            case R.id.discord:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DiscordFragment()).commit();
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

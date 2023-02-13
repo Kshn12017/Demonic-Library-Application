@@ -88,7 +88,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
             case R.id.nav_gallery:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GalleryFragment()).commit();
                 break;
-            case R.id.nav_slideshow:
+            case R.id.nav_request:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RequestFragment()).commit();
                 break;
             case R.id.manage:

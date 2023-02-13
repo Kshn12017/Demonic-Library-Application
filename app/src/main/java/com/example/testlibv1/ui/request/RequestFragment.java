@@ -34,6 +34,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -96,22 +97,6 @@ public class RequestFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 requestnovel();
-
-                db.collection("Requests")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        Log.d(TAG, document.getId() + " => " + document.getData());
-                                    }
-                                } else {
-                                    Log.d(TAG, "Error getting documents: ", task.getException());
-                                }
-                            }
-                        });
-
             }
         });
 
@@ -153,16 +138,44 @@ public class RequestFragment extends Fragment {
                     position.setError("Please specify");
                 } else if(discordstr.isEmpty()){
                     discord.setError("Please specify");
-                } else{
+                } else {
+                    if (isValid(linkstr)) {
+                        Map<String, Object> values = new HashMap<>();
+                        values.put("Novel", novelstr);
+                        values.put("Group", groupstr);
+                        values.put("Description", descriptionstr);
+                        values.put("Genre", genrestr);
+                        values.put("Author", authorstr);
+                        values.put("Link", linkstr);
+                        values.put("Position", positionstr);
+                        values.put("Discord ID", discordstr);
+                        db.collection("Requests").document(filename).set(values).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(getActivity(), "Request Submitted", Toast.LENGTH_SHORT).show();
+                                Intent change = new Intent(getActivity(), NavigationActivity.class);
+                                startActivity(change);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity(), "Adding failed.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else{
+                        link.setError("Enter a valid url");
+                    }
+                }
+            }
+            if(memberstr.equals("No")) {
+                if (isValid(linkstr)) {
                     Map<String, Object> values = new HashMap<>();
-                    values.put("Novel",novelstr);
-                    values.put("Group",groupstr);
-                    values.put("Description",descriptionstr);
-                    values.put("Genre",genrestr);
+                    values.put("Novel", novelstr);
+                    values.put("Group", groupstr);
+                    values.put("Description", descriptionstr);
+                    values.put("Genre", genrestr);
                     values.put("Author", authorstr);
-                    values.put("Link",linkstr);
-                    values.put("Position",positionstr);
-                    values.put("Discord ID", discordstr);
+                    values.put("Link", linkstr);
                     db.collection("Requests").document(filename).set(values).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
@@ -176,33 +189,23 @@ public class RequestFragment extends Fragment {
                             Toast.makeText(getActivity(), "Adding failed.", Toast.LENGTH_SHORT).show();
                         }
                     });
+                } else{
+                    link.setError("Enter a valid url");
                 }
-            }
-            if(memberstr.equals("No")){
-
-                Map<String, Object> values = new HashMap<>();
-                values.put("Novel",novelstr);
-                values.put("Group",groupstr);
-                values.put("Description",descriptionstr);
-                values.put("Genre",genrestr);
-                values.put("Author", authorstr);
-                values.put("Link",linkstr);
-                db.collection("Requests").document(filename).set(values).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(getActivity(), "Request Submitted", Toast.LENGTH_SHORT).show();
-                        Intent change = new Intent(getActivity(), NavigationActivity.class);
-                        startActivity(change);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Adding failed.", Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
         }
 
+    }
+
+    public static boolean isValid(String url)
+    {
+        try {
+            new URL(url).toURI();
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 
     @Override

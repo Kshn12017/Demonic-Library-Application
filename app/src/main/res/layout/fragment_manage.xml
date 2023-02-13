@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Select the novel"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextView3"
@@ -60,7 +60,7 @@
         android:layout_below="@+id/layout1"
         android:gravity="center"
         android:text="Add"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/addChap"
@@ -68,14 +68,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout1"
         android:text="Add"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <View
         android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="15dp"
         android:layout_below="@+id/addNovel"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 
     <View
@@ -83,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="15dp"
         android:layout_below="@+id/addChap"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 
     <ScrollView
@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/view1"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/layout"
@@ -107,7 +107,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/view2"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/layout2"

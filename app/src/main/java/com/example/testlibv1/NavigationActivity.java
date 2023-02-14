@@ -127,17 +127,13 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        if (currentFrag instanceof HomeFragment) {
-            if (pressedTime + 2000 > System.currentTimeMillis()) {
-                super.onBackPressed();
-            } else {
-                Toast.makeText(getBaseContext(), "Press again to exit.", Toast.LENGTH_SHORT).show();
-            }
-            pressedTime = System.currentTimeMillis();
+
+        if (pressedTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed();
         } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-            finish();
+            Toast.makeText(getBaseContext(), "Press again to exit.", Toast.LENGTH_SHORT).show();
         }
+        pressedTime = System.currentTimeMillis();
     }
 
     @Override

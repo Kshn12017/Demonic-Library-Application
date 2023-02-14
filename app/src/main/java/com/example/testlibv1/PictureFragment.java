@@ -49,6 +49,7 @@ public class PictureFragment extends Fragment {
     AutoCompleteTextView autoCompleteTextView;
     Button addImage;
     LinearLayout linear2;
+    TextView textView;
 
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -74,6 +75,7 @@ public class PictureFragment extends Fragment {
         autoCompleteTextView = view.findViewById(R.id.autoCompleteTextView);
         addImage = view.findViewById(R.id.addImage);
         linear2 = view.findViewById(R.id.linear2);
+        textView = view.findViewById(R.id.textView);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -102,6 +104,7 @@ public class PictureFragment extends Fragment {
                                     Log.d(TAG, "imgstr: " + imgstr);
                                     imagecall(imgstr);
                                 }
+                                textView.setVisibility(View.VISIBLE);
                             }
                         }
                     }

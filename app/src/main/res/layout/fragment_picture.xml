@@ -57,7 +57,8 @@
         android:text="Currently uploaded images:"
         android:textSize="27sp"
         android:textStyle="bold"
-        android:layout_below="@+id/view1"/>
+        android:layout_below="@+id/view1"
+        android:visibility="gone"/>
 
     <View
         android:id="@+id/view2"

@@ -259,31 +259,3 @@ public class NovelHomeActivity extends AppCompatActivity {
         Log.d(TAG, "Ran: " + namaestr);
     }
 }
-
-            /*dbRef.child(novelname).child("Chapter").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    HashMap<String, Object> values = new HashMap<>();
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        commentlist.add(dataSnapshot.getKey());
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(NovelHomeActivity.this, R.layout.dropdown, commentlist);
-                        comment_list.setAdapter(adapter);
-                        novellink.add((String) dataSnapshot.getValue());
-                        values.put(dataSnapshot.getKey(), dataSnapshot.getValue());
-
-                        comment_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                String chapterNum = (String) comment_list.getItemAtPosition(i);
-                                String chapter = (String) values.get(chapterNum);
-                                Intent change = new Intent(NovelHomeActivity.this, ChapterActivity.class);
-                                change.putExtra("ChapLink", chapter);
-                                startActivity(change);
-                            }
-                        });
-
-                    }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {}
-            });*/
